@@ -1,0 +1,3 @@
+#!/bin/sh
+mdutil -i off `pwd`
+rm -rf .*
