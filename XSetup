@@ -9,29 +9,15 @@ if [ $? = 1 ]; then
 fi
 
 sudo spctl --master-disable
-#sudo mdutil -a -i off
-#sudo touch /Volumes/CARD/.metadata_never_index
 
-#defaults write com.apple.iTunes DeviceBackupsDisabled -bool YES
+defaults write com.apple.iTunes DeviceBackupsDisabled -bool YES
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 defaults write com.apple.iTunes AutomaticDeviceBackupsDisabled -bool true
 
-#$CDIR/RAMDISK.sh
+#$CDIR/XRamDisk
 
 exit
 
-cat << \EOF > ~/.zshrc
-export CLICOLOR=1
-export LSCOLORS=ExGxFxdaCxDaDahbadeche
-
-#autoload -U colors && colors
-#PROMPT="%{$fg_bold[cyan]%}%n%{$reset_color%}@%{$fg_bold[cyan]%}%m %{$fg_bold[green]%}%1~ %{$reset_color%}%#"
-
-alias gitreset="git reset --hard"
-
-export XWING_HOST=
-export XWING_PASS=
-EOF
 
 # Speed Test
 cd $CDIR
@@ -39,20 +25,22 @@ curl -o speedtest https://raw.githubusercontent.com/sivel/speedtest-cli/master/s
 chmod +x speedtest
 
 # Brew
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 brew update
 
-brew install scrcpy python3
+brew install scrcpy
 
 # Python
-mkdir -p ~/.config/pip
-cat << \EOF > ~/.config/pip/pip.conf
+mkdir ~/.pip
+cat << \EOF > ~/.pip/pip.conf
 [global]
-index-url = https://mirrors.aliyun.com/pypi/simple/
+index-url=http://mirrors.aliyun.com/pypi/simple/
+[install]
+trusted-host=mirrors.aliyun.com
 EOF
 
-pip3 install --user esptool
-
+pip3 install esptool miservice
 
 # Sublime
 # +Package Control: Command+Shift+P
@@ -61,6 +49,7 @@ pip3 install --user esptool
 #   +Codec33
 #   +JsFormat
 #   +Pretty JSON
+#   +SFTP
 # Settings
 #   "rulers": [80,120,160,200],
 #   "word_wrap": "false",
@@ -68,31 +57,30 @@ pip3 install --user esptool
 #   "translate_tabs_to_spaces": true,
 #   "trim_trailing_white_space_on_save": true,
 # Host
-#	搜索16进制 97 94 0D 00 改为 00 00 00 00
-echo "0.0.0.0 license.sublimehq.com" | sudo tee -a /etc/hosts
-echo "0.0.0.0 45.55.255.55" | sudo tee -a /etc/hosts
-echo "0.0.0.0 45.55.41.223" | sudo tee -a /etc/hosts
-echo "127.0.0.1 www.sublimetext.com" | sudo tee -a /etc/hosts
-echo "127.0.0.1 sublimetext.com" | sudo tee -a /etc/hosts
-echo "127.0.0.1 sublimehq.com" | sudo tee -a /etc/hosts
-echo "127.0.0.1 telemetry.sublimehq.com" | sudo tee -a /etc/hosts
-echo
+echo: https://github.com/QiuChenly/MyMacsAppCrack
+echo "0249FFC6 EBE15B41 5C415E41 5F5DC355 4889E5 => 0249FFC6 EBE15B41 5C415E41 5F5DC36A 0158C3"
+sudo codesign -f -s - --timestamp=none ~/Applications/Sublime.app
 
 # SN
+cat << EOF | sudo tee -a /etc/hosts
+127.0.0.1 www.sublimetext.com
+127.0.0.1 license.sublimehq.com
+EOF
+
 cat << \EOF
 #Sublime
 ----- BEGIN LICENSE -----
-TwitterInc
-200 User License
-EA7E-890007
-1D77F72E 390CDD93 4DCBA022 FAF60790
-61AA12C0 A37081C5 D0316412 4584D136
-94D7F7D4 95BC8C1C 527DA828 560BB037
-D1EDDD8C AE7B379F 50C9D69D B35179EF
-2FE898C4 8E4277A8 555CE714 E1FB0E43
-D5D52613 C3D12E98 BC49967F 7652EED2
-9D2D2E61 67610860 6D338B72 5CF95C69
-E36B85CC 84991F19 7575D828 470A92AB
+cracked@macked.app
+Unlimited User License
+EA7E-8888888
+3AED0BDB9CD5123CDE42973715763305
+6F251DBED243E59935EB274AA468E33E
+D7790513000ECF845A71A3A446E820E1
+7CC9719C9DFCAFB29189974012CFDF33
+9D3275454E37B76745F1B8E771E2ABC5
+A7058D431570EEA27A43B69EFCC9C482
+D2027C11326EDD346CC229FC7FD483C8
+771EE17E2F4A0A20F8A39D814DCD1504
 ------ END LICENSE ------
 
 #Axure
@@ -109,24 +97,18 @@ PLEDPRO095-42E7-REKA-M4H4-1309-1405
 MacXMacX
 4nbSTd3G6C-2bS2quo1of-AIC
 
-#OmniGraffle
-Yonsm
-MUIF-KYEG-ARFW-LWMV-WHAD-JEGW-HAD
-
 #VMWare
-YF390-0HF8P-M81RQ-2DXQE-M2UT6
+4C21U-2KK9Q-M8130-4V2QH-CF810
 
 #Proxifier
 P427L-9Y552-5433E-8DSR3-58Z68
 
-#Charles
+# https://www.zzzmode.com/mytools/charles/
 Mac OS
 6BACE69077E6DA3993
 EOF
 
 # VS Code
-#   +Chinese
-#   +Python
 #   +PlatformIO
 cat << \EOF > ~/Library/Application\ Support/Code/User/settings.json
 {
@@ -147,21 +129,7 @@ cat << \EOF > ~/Library/Application\ Support/Code/User/settings.json
     "python.pythonPath": "/usr/bin/python3",
     "workbench.startupEditor": "newUntitledFile",
     "python.formatting.provider": "autopep8",
-    "python.formatting.autopep8Args": ["--max-line-length=200"]
+    "python.formatting.autopep8Args": ["--max-line-length=200"],
+    "autopep8.args": ["--max-line-length=200", "--ignore=W191"]
 }
 EOF
-
-echo 'alias grs="git reset --hard"' >> ~/.zshrc
-
-# Flutter
-SITES=/Volumes/DAT/Sites
-mkdir $SITES
-cd $SITES
-git clone -b master https://github.com/flutter/flutter.git
-cat << \EOF > ~/.bash_profile
-export PUB_HOSTED_URL=https://pub.flutter-io.cn
-export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-export PATH=$SITES/flutter/bin:$PATH
-EOF
-flutter doctor
-
