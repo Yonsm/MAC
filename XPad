@@ -4,7 +4,7 @@ SRC_DIR=/Volumes/USR/Applications
 DST_DIR=$HOME/Applications
 
 # Check
-if [ -d "$SRC_DIR" ] && [ "$1" != "sort" ]; then
+if [ -d "$SRC_DIR" ] && [[ "$1" =~ "link" ]]; then
 	# Prepare
 	if [ -d "$DST_DIR" ]; then
 		rm -rf $DST_DIR/*
@@ -59,7 +59,7 @@ if [ -d "$SRC_DIR" ] && [ "$1" != "sort" ]; then
 	sleep 2
 fi
 
-if [ "$1" != "link" ]; then
+if [ "$1" != "linkonly" ]; then
 	cd $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db
 	order1=0
 	order2=0

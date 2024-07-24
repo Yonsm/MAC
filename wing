@@ -63,7 +63,7 @@ update() {
 	_FMT=${_GFW_LIST##*.}
 	[ "$_FMT" = conf -o "$_FMT" = pac ] && _GFW_TMP=/tmp/gfwlist.txt || _GFW_TMP=$_GFW_LIST
 
-	curl -k -o $_GFW_TMP https://raw.githubusercontent.com/Yonsm/OponWrt/main/fix-files/package/helloworld/wing/gfwlist.txt || (echo "githubusercontent.com" > $_GFW_TMP; echo "Update gfwlist failed! You should run wing update again.")
+	curl -k -o $_GFW_TMP https://yonsm.github.io/OponWrt/fix-files/package/helloworld/wing/gfwlist.txt || (echo "githubusercontent.com" > $_GFW_TMP; echo "Update gfwlist failed! You should run wing update again.")
 	if [ $_FMT = conf ]; then
 		sed -e 's_^_server=/_' -e 's_$_/127.0.0.1#5354_' $_GFW_TMP > $_GFW_LIST
 		sed -e 's_^_ipset=/_' -e 's_$_/gfwlist_' $_GFW_TMP >> $_GFW_LIST
